@@ -1,0 +1,75 @@
+#include <stdio.h>
+#define MAX 10
+
+int adj[MAX][MAX];
+int visited[MAX];
+int n;
+void addEdge(int u, int v)
+{
+    adj[u][v] = 1;
+    adj[v][u] = 1; 
+}
+
+void BFS(int start)
+{
+    int queue[MAX], front = 0, rear = 0;
+    for (int i = 0; i < n; i++)
+        visited[i] = 0;
+
+    visited[start] = 1;
+    queue[rear++] = start;
+    printf("BFS from Subject %d: ", start);
+
+    while (front < rear)
+    {
+        int curr = queue[front++];
+        printf("%d ", curr);
+        for (int i = 0; i < n; i++)
+        {
+            if (adj[curr][i] == 1 && !visited[i])
+            {
+                visited[i] = 1;
+                queue[rear++] = i;
+            }
+        }
+    }
+    printf("\n");
+}
+
+void DFSUtil(int v)
+{
+    visited[v] = 1;
+    printf("%d ", v);
+    for (int i = 0; i < n; i++)
+        if (adj[v][i] == 1 && !visited[i])
+            DFSUtil(i);
+}
+
+void DFS(int start)
+{
+    for (int i = 0; i < n; i++)
+        visited[i] = 0;
+    printf("DFS from Subject %d: ", start);
+    DFSUtil(start);
+    printf("\n");
+}
+
+int main()
+{
+    n = 6;
+    addEdge(0, 1);
+    addEdge(1, 2);
+    addEdge(1, 3);
+    addEdge(2, 4);
+    addEdge(3, 4);
+    addEdge(4, 5); 
+
+    BFS(0);
+    DFS(0);
+
+    return 0;
+}
+
+Output:
+BFS from Subject 0: 0 1 2 3 4 5 
+DFS from Subject 0: 0 1 2 4 3 5 
