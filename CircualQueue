@@ -1,0 +1,83 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node
+{
+    int foodToken;
+    struct Node *next;
+};
+
+struct Node *rear = NULL; 
+void enqueue(int token)
+{
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+    newNode->foodToken = token;
+    if (rear == NULL)
+    {
+        newNode->next = newNode;
+        rear = newNode;
+    }
+    else
+    {
+        newNode->next = rear->next;
+        rear->next = newNode;
+        rear = newNode;
+    }
+    printf("Token %d issued\n", token);
+}
+
+void dequeue()
+{
+    if (rear == NULL)
+    {
+        printf("Queue is Empty!\n");
+        return;
+    }
+    struct Node *front = rear->next;
+    printf("Token %d served\n", front->foodToken);
+    if (front == rear)
+        rear = NULL;
+    else
+        rear->next = front->next;
+    free(front);
+}
+
+void display()
+{
+    if (rear == NULL)
+    {
+        printf("Queue is Empty!\n");
+        return;
+    }
+    struct Node *temp = rear->next;
+    printf("Pending Tokens: ");
+    do
+    {
+        printf("%d ", temp->foodToken);
+        temp = temp->next;
+    } while (temp != rear->next);
+    printf("\n");
+}
+
+int main()
+{
+    enqueue(1);
+    enqueue(2);
+    enqueue(3);
+    display();
+    dequeue();
+    display();
+    enqueue(4);
+    display();
+    return 0;
+}
+
+Output:
+Token 1 issued
+Token 2 issued
+Token 3 issued
+Pending Tokens: 1 2 3 
+Token 1 served
+Pending Tokens: 2 3 
+Token 4 issued
+Pending Tokens: 2 3 4 
